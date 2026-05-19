@@ -1,0 +1,7 @@
+{"query": "open google chrome", "expected_tool": "system", "expected_action": "open_app"}
+{"query": "what time is it", "expected_tool": "realtime", "expected_action": "time"}
+{"query": "who won the game last night", "expected_tool": "realtime", "expected_action": "live_score"}
+{"query": "what is the weather like", "expected_tool": "realtime", "expected_action": "grounded"}
+{"query": "play some coldplay", "expected_tool": "browser", "expected_action": "play_youtube_music"}
+{"query": "read the screen", "expected_tool": "screen", "expected_action": "analyze_error"}
+{"query": "hey there", "expected_tool": "llm", "expected_action": "chat"}

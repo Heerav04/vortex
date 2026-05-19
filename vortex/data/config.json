@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "offline_first": true,
+  "default_mode": "general",
+  "safety": {
+    "confirm_dangerous_actions": true
+  },
+  "profile": {
+    "name": "Heerav Amin",
+    "location": "gujarat",
+    "role": "CS student",
+    "weak_areas": [
+      "DSA recursion",
+      "system design"
+    ],
+    "favorite_apps": [
+      "VSCode",
+      "Cursor",
+      "Ollama",
+      "Docker"
+    ],
+    "routine": {
+      "09:00": "coding",
+      "14:00": "LeetCode"
+    },
+    "style": "PEP8 Python, React/Next.js fullstack"
+  }
+}

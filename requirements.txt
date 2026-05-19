@@ -1,0 +1,12 @@
+requests>=2.31.0
+python-dotenv>=1.0.1
+SpeechRecognition>=3.10.4
+PyAudio>=0.2.14
+pyttsx3>=2.90
+psutil>=5.9.8
+WMI>=1.5.1
+schedule>=1.2.1
+pycaw>=20240210
+comtypes>=1.4.7
+pywin32>=306
+pytube>=15.0.0

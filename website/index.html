@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vortex AI OS — Personal AI Operating System for Windows</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #050507;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.06);
+            --accent-purple: #7c3aed;
+            --accent-purple-glow: rgba(124, 58, 237, 0.4);
+            --accent-teal: #03dac6;
+            --accent-teal-glow: rgba(3, 218, 198, 0.4);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --font-sans: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Ambient background glow effects */
+        .ambient-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .glow-1 {
+            position: absolute;
+            top: -10%;
+            left: 20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, rgba(0,0,0,0) 70%);
+            filter: blur(80px);
+            animation: float 20s infinite alternate;
+        }
+
+        .glow-2 {
+            position: absolute;
+            top: 40%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(3, 218, 198, 0.1) 0%, rgba(0,0,0,0) 70%);
+            filter: blur(80px);
+            animation: float-reverse 25s infinite alternate;
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(50px) scale(1.1); }
+        }
+
+        @keyframes float-reverse {
+            0% { transform: translateY(0) scale(1.1); }
+            100% { transform: translateY(-50px) scale(0.9); }
+        }
+
+        /* Layout Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+        }
+
+        /* Header / Nav */
+        header {
+            padding: 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--accent-purple);
+            text-shadow: 0 0 10px var(--accent-purple-glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .btn-nav {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .btn-nav:hover {
+            background: var(--accent-purple);
+            box-shadow: 0 0 15px var(--accent-purple-glow);
+            border-color: var(--accent-purple);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 90px 0 60px 0;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        @media (max-width: 968px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 60px 0;
+            }
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #ffffff 50%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 36px;
+            font-weight: 300;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        @media (max-width: 968px) {
+            .hero-ctas {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-ctas {
+                flex-direction: column;
+                width: 100%;
+            }
+            .hero-ctas a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .cta-main {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--accent-purple), #9333ea);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(124, 58, 237, 0.5);
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+        }
+
+        .cta-secondary {
+            padding: 16px 32px;
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s;
+        }
+
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .compatibility-badge {
+            margin-top: 24px;
+            font-size: 0.85rem;
+            color: var(--accent-teal);
+            font-family: var(--font-mono);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @media (max-width: 968px) {
+            .compatibility-badge {
+                justify-content: center;
+            }
+        }
+
+        /* Interactive Simulator Area */
+        .simulator-container {
+            background: rgba(10, 10, 15, 0.7);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .sim-header {
+            background: #0e0e12;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .sim-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .sim-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .sim-dots .dot-red { background-color: #ef4444; }
+        .sim-dots .dot-yellow { background-color: #f59e0b; }
+        .sim-dots .dot-green { background-color: #10b981; }
+
+        .sim-title {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .sim-body {
+            padding: 20px;
+            height: 320px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #060608;
+        }
+
+        .sim-actions {
+            background: #0a0a0f;
+            padding: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .sim-btn {
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            border-radius: 4px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .sim-btn:hover {
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--accent-purple);
+            border-color: var(--accent-purple);
+        }
+
+        .sim-btn.active {
+            background: rgba(124, 58, 237, 0.2);
+            color: #fff;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 10px rgba(124, 58, 237, 0.2);
+        }
+
+        .line-user { color: var(--accent-teal); }
+        .line-sys { color: var(--text-muted); }
+        .line-vortex { color: var(--accent-purple); font-weight: 600; }
+        .line-exec { color: #f59e0b; }
+
+        /* Feature section */
+        .features {
+            padding: 100px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 32px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-purple), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-purple);
+            margin-bottom: 24px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .feature-card:nth-child(2n) .icon-wrapper {
+            background: rgba(3, 218, 198, 0.1);
+            color: var(--accent-teal);
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Flow section */
+        .flow-section {
+            padding: 80px 0;
+            background: rgba(10, 10, 15, 0.4);
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .flow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .flow-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .flow-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 0 15px var(--accent-purple-glow);
+        }
+
+        .flow-step:nth-child(2) .flow-number {
+            background: var(--accent-teal);
+            box-shadow: 0 0 15px var(--accent-teal-glow);
+        }
+
+        .flow-step h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .flow-step p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Bottom Call to Action */
+        .bottom-cta {
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .bottom-cta-card {
+            background: radial-gradient(circle at top, rgba(124, 58, 237, 0.15) 0%, rgba(255,255,255,0.01) 80%);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 60px 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .bottom-cta-card h2 {
+            font-size: 2.8rem;
+            margin-bottom: 16px;
+            font-weight: 800;
+        }
+
+        .bottom-cta-card p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--text-main);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: var(--accent-purple);
+        }
+
+        .footer-logo {
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg">
+        <div class="glow-1"></div>
+        <div class="glow-2"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <div class="container">
+        <!-- Navigation Header -->
+        <header>
+            <div class="logo">
+                <span>✦</span> VORTEX
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#architecture">How it works</a></li>
+                <li><a href="https://github.com/yourusername/vortex-ai-os" target="_blank">Docs</a></li>
+                <li><a href="../vortex_installer.bat" download="vortex_installer.bat" class="btn-nav">Download Setup</a></li>
+            </ul>
+        </header>
+
+        <!-- Hero Area -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Windows Desktop.<br>Unshackled.</h1>
+                <p>Vortex is a voice-first, production-grade hybrid AI assistant tailored for Windows. It bridges high-speed cloud planning (Gemini) with private offline fallbacks (Ollama) to automate your desktop, monitor files, and analyze errors.</p>
+                <div class="hero-ctas">
+                    <!-- HTML5 download attribute automatically targets and downloads the installer -->
+                    <a href="../vortex_installer.bat" download="vortex_installer.bat" class="cta-main">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Download Installer
+                    </a>
+                    <a href="#features" class="cta-secondary">Explore Features</a>
+                </div>
+                <div class="compatibility-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line></svg>
+                    Windows 10/11 Compatible • Offline Vosk & Ollama Ready
+                </div>
+            </div>
+
+            <!-- Terminal Simulator Panel -->
+            <div class="simulator-container">
+                <div class="sim-header">
+                    <div class="sim-dots">
+                        <span class="dot-red"></span>
+                        <span class="dot-yellow"></span>
+                        <span class="dot-green"></span>
+                    </div>
+                    <div class="sim-title">VORTEX_CORE_SIMULATOR.EXE</div>
+                    <div style="width: 40px;"></div>
+                </div>
+                <div class="sim-body" id="simBody">
+                    <div class="line-sys">Vortex Neural Link online. Click any action below to simulate query execution.</div>
+                </div>
+                <div class="sim-actions">
+                    <button class="sim-btn active" onclick="runSim('dsa')">study DSA</button>
+                    <button class="sim-btn" onclick="runSim('error')">what's this error?</button>
+                    <button class="sim-btn" onclick="runSim('interview')">prep interview</button>
+                    <button class="sim-btn" onclick="runSim('volume')">volume 30%</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Grid Section -->
+        <section id="features" class="features">
+            <div class="section-title">
+                <h2>Engineered for Power Users</h2>
+                <p>A modular system designed to bypass cognitive overhead, automate desktop environments, and run offline.</p>
+            </div>
+            
+            <div class="feature-grid">
+                <!-- Card 1 -->
+                <div class="feature-card">
+                    <div class="icon-wrapper">🧠</div>
+                    <h3>Dual-Brain Resilience</h3>
+                    <p>Integrates a structured Gemini-powered planner (Planner V2) with direct REST fallbacks and local Ollama model options (gemma3:4b/llama3.2). Never fails when offline.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="feature-card">
+                    <div class="icon-wrapper">🎙️</div>
+                    <h3>Natural Speech Pipeline</h3>
+                    <p>Features hands-free wake word recognition ("Vortex") with noise isolation, natural neural Edge TTS synthesis, and barge-in voice command cancellation.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="feature-card">
+                    <div class="icon-wrapper">🛠️</div>
+                    <h3>Deep System Hooks</h3>
+                    <p>Direct PowerShell start menu indexing caches 100% of installed executables and store apps. Includes Pycaw hardware endpoints for direct volume scaling.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="feature-card">
+                    <div class="icon-wrapper">👁️</div>
+                    <h3>Screen & OCR Awareness</h3>
+                    <p>Takes high-resolution active buffers using PyAutoGUI and parses screen contents via Tesseract OCR to diagnose compile errors or stack traces dynamically.</p>
+                </div>
+                <!-- Card 5 -->
+                <div class="feature-card">
+                    <div class="icon-wrapper">🎯</div>
+                    <h3>Multi-Step Macros</h3>
+                    <p>Executes workflow actions using triggers. Set custom modes like Interview Preparation, DSA Study, Gaming, or Productivity with single statements.</p>
+                </div>
+                <!-- Card 6 -->
+                <div class="feature-card">
+                    <div class="icon-wrapper">📊</div>
+                    <h3>Observability & RAG</h3>
+                    <p>Logs millisecond tool execution latencies to SQLite, parsed via a Streamlit analytics panel. Recalls past context semantically using ChromaDB vector embeddings.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Onboarding Process flow -->
+        <section id="architecture" class="flow-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Instant Setup & Configuration</h2>
+                    <p>How the setup installer prepares your desktop in seconds.</p>
+                </div>
+                
+                <div class="flow-grid">
+                    <div class="flow-step">
+                        <div class="flow-number">1</div>
+                        <h4>Run Installer</h4>
+                        <p>Launch the downloaded <code>vortex_installer.bat</code> to create environment links and retrieve modules.</p>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-number">2</div>
+                        <h4>Accept Agreements</h4>
+                        <p>Consent to EULA terms highlighting local audio storage and screenshot sandbox privacy guards.</p>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-number">3</div>
+                        <h4>Model Setup</h4>
+                        <p>Paste your Gemini API Key and select your preferred local Ollama model to write values to your local <code>.env</code>.</p>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-number">4</div>
+                        <h4>Onboard Profile</h4>
+                        <p>Fill out your name, profession, and weak areas. Vortex immediately launches the Neural Dashboard!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Download CTA -->
+        <section class="bottom-cta">
+            <div class="bottom-cta-card">
+                <h2>Bring Vortex to Your Desktop</h2>
+                <p>Deploy a premium, voice-first AI operating system layer and take back focus from multi-click desktop operations.</p>
+                <a href="../vortex_installer.bat" download="vortex_installer.bat" class="cta-main">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download Web Setup (BAT)
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-logo">✦ VORTEX AI OS</div>
+            <p>Designed for developers, hackers, and builders. Maintained by <a href="#">Heerav Amin</a>.</p>
+        </footer>
+    </div>
+
+    <!-- Simulator logic script -->
+    <script>
+        const simulations = {
+            dsa: [
+                { type: 'user', text: '> "Vortex, study DSA"' },
+                { type: 'sys', text: '[System] Capture active screen buffer...' },
+                { type: 'sys', text: '[OCR] Extracted: 0 words. Clean editor.' },
+                { type: 'sys', text: '[Planner V2] Match routing: plugins.set_mode -> params {"mode": "study"}' },
+                { type: 'exec', text: '[Tool Execution] Reading user config profile...' },
+                { type: 'exec', text: '[Tool Execution] Selected weak topic: "DSA recursion"' },
+                { type: 'exec', text: '[Tool Execution] Launching Chrome -> https://leetcode.com/tag/recursion/' },
+                { type: 'vortex', text: 'Vortex: "DSA study mode initialized. I\'ve opened LeetCode filtered directly to recursion. Let\'s practice!"' }
+            ],
+            error: [
+                { type: 'user', text: '> "Vortex, what\'s this error?"' },
+                { type: 'sys', text: '[System] Capturing desktop screenshot to data/last_screenshot.png...' },
+                { type: 'sys', text: '[OCR] Parsing screenshot text...' },
+                { type: 'sys', text: '[OCR] Extracted: "TypeError: Cannot read properties of undefined (reading \'execute\')"' },
+                { type: 'sys', text: '[Planner V2] Match routing: screen.analyze_error -> params {"screenshot_text": "..."}' },
+                { type: 'exec', text: '[Tool Execution] Feeding trace to Gemini 2.5 Flash for debugger analysis...' },
+                { type: 'vortex', text: 'Vortex: "I see a TypeError in your code. You are trying to read \'execute\' on an object that is currently undefined. Double check if your ToolRegistry is instantiated before calling the execute method!"' }
+            ],
+            interview: [
+                { type: 'user', text: '> "Vortex, prep interview"' },
+                { type: 'sys', text: '[System] Check cloud connection -> Online (Gemini)' },
+                { type: 'sys', text: '[Planner V2] Match routing: plugins.set_mode -> params {"mode": "interview"}' },
+                { type: 'exec', text: '[Tool Execution] Launching multi-tab workspace environment...' },
+                { type: 'exec', text: '[Tool Execution] URL 1 -> Google Calendar' },
+                { type: 'exec', text: '[Tool Execution] URL 2 -> LeetCode problemsets' },
+                { type: 'exec', text: '[Tool Execution] URL 3 -> GitHub System Design Primer' },
+                { type: 'vortex', text: 'Vortex: "Interview prep environment is configured Heerav. Your calendar, LeetCode list, and System Design references are now open. Good luck!"' }
+            ],
+            volume: [
+                { type: 'user', text: '> "Vortex, set volume to 30%"' },
+                { type: 'sys', text: '[Planner V2] Match routing: system.set_volume -> params {"percent": 30}' },
+                { type: 'exec', text: '[Tool Execution] Initializing pycaw endpoint volume hooks...' },
+                { type: 'exec', text: '[Tool Execution] Master Volume Scalar set to 0.30' },
+                { type: 'vortex', text: 'Vortex: "Windows master volume adjusted to 30 percent."' }
+            ]
+        };
+
+        let simInterval = null;
+
+        function runSim(key) {
+            // Update active button state
+            const buttons = document.querySelectorAll('.sim-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const body = document.getElementById('simBody');
+            body.innerHTML = ''; // Clear output
+
+            if (simInterval) clearInterval(simInterval);
+
+            const steps = simulations[key];
+            let currentStep = 0;
+
+            function printStep() {
+                if (currentStep >= steps.length) {
+                    clearInterval(simInterval);
+                    return;
+                }
+
+                const step = steps[currentStep];
+                const div = document.createElement('div');
+                
+                if (step.type === 'user') div.className = 'line-user';
+                else if (step.type === 'sys') div.className = 'line-sys';
+                else if (step.type === 'exec') div.className = 'line-exec';
+                else if (step.type === 'vortex') div.className = 'line-vortex';
+
+                div.innerText = step.text;
+                body.appendChild(div);
+                body.scrollTop = body.scrollHeight; // Scroll to bottom
+
+                currentStep++;
+            }
+
+            printStep();
+            simInterval = setInterval(printStep, 800);
+        }
+
+        // Start default simulation
+        window.onload = () => {
+            runSim('dsa');
+        };
+    </script>
+</body>
+</html>

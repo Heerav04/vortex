@@ -1,0 +1,3 @@
+{"query": "What are my favorite apps?", "expected_memory": "User likes VSCode, Cursor, and Docker."}
+{"query": "Where do I live?", "expected_memory": "User location is Mumbai."}
+{"query": "What is my routine?", "expected_memory": "09:00 coding, 14:00 LeetCode."}

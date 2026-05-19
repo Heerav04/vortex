@@ -1,0 +1,19 @@
+# Python cache and test artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Build artifacts
+build/
+dist/
+
+# Local runtime logs
+*.log
+
+# Local secrets and machine-specific files
+.env
+vortex_auth.json

@@ -1,0 +1,2 @@
+2026-03-28 13:52:00,499 ERROR ElevenLabs TTS failed: HTTP Error 401: Unauthorized. Falling back to local TTS.
+2026-03-28 13:52:16,721 ERROR ElevenLabs TTS failed: HTTP Error 401: Unauthorized. Falling back to local TTS.

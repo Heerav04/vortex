@@ -1,0 +1,50 @@
+2026-03-28 15:19:09,810 INFO Loaded Vortex profile for Heerav Amin in Mumbai
+2026-03-28 15:19:09,810 INFO AFC is enabled with max remote calls: 10.
+2026-03-28 15:19:12,355 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-28 15:19:12,432 INFO Vortex says (Local Offline Voice): Alright Heerav, I'm your digital sidekick! I can launch apps quicker than you can `npm install`, scour the web for answers faster than a `fetch` request, and keep your Windows system running smoother than a perfectly optimized React component.
+2026-03-28 15:19:29,638 INFO Listening...
+2026-03-28 15:19:37,619 INFO Heard: I don't know what
+2026-03-28 15:19:37,619 INFO User query: I don't know what
+2026-03-28 15:19:37,689 INFO Loaded Vortex profile for Heerav Amin in Mumbai
+2026-03-28 15:19:37,689 INFO AFC is enabled with max remote calls: 10.
+2026-03-28 15:19:42,383 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-28 15:19:42,459 INFO Vortex says (Local Offline Voice): No worries, Heerav! I meant I can assist you with tasks like launching your favorite dev apps, finding quick answers for your coding challenges, or streamlining your system processes. What can I help you with right now?
+2026-03-28 15:19:59,182 INFO Listening...
+2026-03-28 15:20:05,192 INFO Heard: aur would you like to keep it on
+2026-03-28 15:20:05,193 INFO User query: aur would you like to keep it on
+2026-03-28 15:20:05,288 INFO Loaded Vortex profile for Heerav Amin in Mumbai
+2026-03-28 15:20:05,289 INFO AFC is enabled with max remote calls: 10.
+2026-03-28 15:20:11,459 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-28 15:20:11,548 INFO Vortex says (Local Offline Voice): Absolutely, Heerav! I'm always 'on' and ready to assist you. Just let me know if you need to check the time, launch an app, or have a coding question.
+2026-03-28 15:20:24,270 INFO Listening...
+2026-03-28 15:20:31,558 INFO Listening...
+2026-03-28 15:20:38,819 INFO Listening...
+2026-03-28 15:20:46,074 INFO Listening...
+2026-03-28 15:20:53,334 INFO Listening...
+2026-03-28 15:27:46,099 INFO Loaded Vortex profile for Heerav Amin in Mumbai
+2026-03-28 15:27:46,402 INFO VORTEX: Initializing Dual-Brain Strategy (Gemini + Ollama)...
+2026-03-28 15:27:46,766 INFO OLLAMA: Found local brain! Privacy + Offline mode is READY.
+2026-03-28 15:27:47,514 INFO Imported existing <module 'comtypes.gen' from 'C:\\Users\\heera\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2026-03-28 15:27:47,515 INFO Using writeable comtypes cache directory: 'C:\Users\heera\AppData\Local\Programs\Python\Python312\Lib\site-packages\comtypes\gen'
+2026-03-28 15:27:47,654 INFO Vortex says (Local Offline Voice): Vortex starting up.
+2026-03-28 15:28:13,561 INFO User query: h
+2026-03-28 15:28:13,641 INFO Loaded Vortex profile for Heerav Amin in Mumbai
+2026-03-28 15:28:14,605 INFO AFC is enabled with max remote calls: 10.
+2026-03-28 15:28:17,409 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-03-28 15:28:17,420 INFO Vortex says (Local Offline Voice): Hey Heerav! What's up? Did you mean 'hi' or were you about to ask me something?
+2026-03-28 15:28:17,512 ERROR Task exception was never retrieved
+future: <Task finished name='Task-8' coro=<VortexVoice.speak() done, defined at C:\Users\heera\Desktop\cr\vortex\ui\voice.py:39> exception=TypeError("string indices must be integers, not 'str'")>
+Traceback (most recent call last):
+  File "C:\Users\heera\Desktop\cr\vortex\ui\voice.py", line 79, in speak
+    await loop.run_in_executor(None, _run)
+  File "C:\Users\heera\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\heera\Desktop\cr\vortex\ui\voice.py", line 75, in _run
+    engine.disconnect('started-word')
+  File "C:\Users\heera\AppData\Local\Programs\Python\Python312\Lib\site-packages\pyttsx3\engine.py", line 118, in disconnect
+    topic = token["topic"]
+            ~~~~~^^^^^^^^^
+TypeError: string indices must be integers, not 'str'
+2026-03-28 15:28:18,940 INFO Continuous mode toggled to: True
+2026-03-28 15:28:32,770 INFO Continuous mode toggled to: False

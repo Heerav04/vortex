@@ -1,0 +1,7 @@
+{
+    "recursion": "Recursion is a programming technique where a function calls itself to solve a smaller instance of the same problem until it reaches a base case.",
+    "vortex": "Vortex is your personal AI Operating System, designed to help you with tasks, study, and system control.",
+    "python": "Python is a high-level, interpreted programming language known for its readability and versatile use in AI, web development, and scripting.",
+    "dsa": "Data Structures and Algorithms (DSA) are the fundamental building blocks of computer science used to organize data and solve problems efficiently.",
+    "ollama": "Ollama is a tool that allows you to run large language models, like Llama 3, locally on your machine."
+}
